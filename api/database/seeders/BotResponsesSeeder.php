@@ -89,7 +89,7 @@ class BotResponsesSeeder extends Seeder
             'server_action' => "TransactionService||GetBalance",
             'client_action' => null,
             'next_step' => null,
-            'message' => "Your balance is: {{balance}} {{currency}}"
+            'message' => "Your balance is: {{balance}} {{currency}}.<br/>What else can I do for you?"
         ]);
         DB::table("bot_responses")->insert([
             'key' => 'deposit',
@@ -110,7 +110,7 @@ class BotResponsesSeeder extends Seeder
             'server_action' => "TransactionService||Deposit",
             'client_action' => null,
             'next_step' => null,
-            'message' => "Thanks! Your deposit was completed successfully."
+            'message' => "Thanks! Your deposit was completed successfully.<br/>What else can I do for you?"
         ]);
         DB::table("bot_responses")->insert([
             'key' => 'withdraw',
@@ -131,7 +131,14 @@ class BotResponsesSeeder extends Seeder
             'server_action' => "TransactionService||Withdraw",
             'client_action' => null,
             'next_step' => null,
-            'message' => "Thanks! Your withdraw was completed successfully."
+            'message' => "Thanks! Your withdraw was completed successfully.<br/>What else can I do for you?"
+        ]);
+        DB::table("bot_responses")->insert([
+            'key' => 'logout',
+            'server_action' => 'UserService||Logout',
+            'client_action' => null,
+            'next_step' => null,
+            'message' => "Ok, bye-bye. See you soon!"
         ]);
     }
 }

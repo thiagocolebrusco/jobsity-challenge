@@ -44,7 +44,8 @@ export default {
             },
             text: "",
             current_action: '',
-            input_type: 'text'
+            input_type: 'text',
+            additional_response: null,
         }
     },
     created() {
@@ -88,13 +89,18 @@ export default {
                         text: this.ReplaceWithUserData(bot_response.message),
                         is_from_user: false
                     }
-                    this.current_action = bot_response
                     this.messages.push(bot_message)
-                    this.additional_data = null
+                    if(!response.data.is_exception){
+                        this.current_action = bot_response
+                        this.additional_data = null
+                        this.additional_response = response.data.additional_response;
+                    }
 
-                    let additional_response = response.data.additional_response;
-                    if(additional_response){
-                        this[additional_response.action](additional_response.data)
+                    if(this.additional_response){
+                        let actions = this.additional_response.action.split("|");
+                        actions.forEach((action) => {
+                            this[action](this.additional_response.data)
+                        })
                     }
                 }
             })
@@ -140,11 +146,9 @@ export default {
             this.transaction.amount = this.text
         },
         SetInputTypeToPassword() {
-            console.log('SetInputTypeToPassword')
             this.input_type = 'password';
         },
         SetInputTypeToText() {
-            console.log('SetInputTypeToText')
             this.input_type = 'text';
         },
         SetToken(data) {
@@ -153,8 +157,11 @@ export default {
                 localStorage.setItem("user", JSON.stringify(data.user))
                 this.user = data.user            
             }
+        },
+        Logout(){
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
         }
-           
     }
 }
 </script>

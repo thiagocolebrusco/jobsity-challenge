@@ -37,7 +37,6 @@ class UserService
 
     public function Login(Array $user_data) {
         try {
-            ;
             if(!$token = auth()->attempt(["email" => $user_data["email"], "password" => $user_data["password"]])){
                 throw new \Exception("Email or password incorrect");
             } else {
@@ -53,6 +52,13 @@ class UserService
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function Logout() {
+        return (object) [
+            "action" => "Logout",
+            "data" => []
+        ];
     }
 
 }

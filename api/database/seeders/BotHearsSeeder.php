@@ -74,5 +74,13 @@ class BotHearsSeeder extends Seeder
             'hears' => 'Withdraw',
             'bot_responses_key' => 'withdraw'
         ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Log out',
+            'bot_responses_key' => 'logout'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Logout',
+            'bot_responses_key' => 'logout'
+        ]);
     }
 }
