@@ -15,8 +15,8 @@ class CreateBotResponsesTable extends Migration
     {
         Schema::create('bot_responses', function (Blueprint $table) {
             $table->string("key", 30)->index();
-            $table->string("server_action", 50)->nullable();
-            $table->string("client_action", 50)->nullable();
+            $table->string("server_action", 100)->nullable();
+            $table->string("client_action", 100)->nullable();
             $table->string("next_step", 30)->nullable();
             $table->string("message")->nullable();
             $table->primary("key");

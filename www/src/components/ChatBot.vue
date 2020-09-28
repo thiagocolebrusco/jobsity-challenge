@@ -4,12 +4,8 @@
             <b-col md="8" offset-md="2" xs="12">
                 <ul class="messages">
                     <li :class="{'user': message.is_from_user, 'bot': !message.is_from_user}" v-for="(message, index) in messages" :key="index">
-                        <span v-if="message.key">{{message.key}}</span>
                         <p class="title">{{message.is_from_user ? user.name : "Jobsity Bot"}}</p>
                         <p class="message" v-html="message.text"></p>
-                        <ul v-if="message.options" class="options">
-                             <li v-for="(option, o_index) in message.options" :key="o_index">{{option}}</li>
-                        </ul>
                     </li>
                 </ul>
             </b-col>
@@ -37,38 +33,46 @@ export default {
         return {
             messages: [],
             user: {
+                id: null,
                 name: "User",
                 email: "",
                 password: ""
             },
+            transaction: {
+                amount: null,
+                currency: null,
+            },
             text: "",
-            current_action: ''
-        }
-    },
-    computed: {
-        input_type() {
-            return this.current_action.key != "register_step_3" ? "text" : "password";
+            current_action: '',
+            input_type: 'text'
         }
     },
     created() {
+        if(localStorage.getItem("user")){
+            this.user = JSON.parse(localStorage.getItem("user"))
+        }
         setTimeout(() => {
-            this.messages.push({
-                text: "Hello mate! How can I help you?",
-                options: [
-                    "Log in",
-                    "Sign up"
-                ],
-                is_from_user: false
-            })
+            if(! this.user.id){
+                this.messages.push({
+                    text: "Hello mate! How can I help you?",
+                    is_from_user: false
+                })
+            } else {
+                this.messages.push({
+                    text: `Welcome back, <strong>${this.user.name}</strong>! What can I do for you?`,
+                    is_from_user: false
+                })
+            }
         }, 1000)
     },
     methods: {
         Send() {
+            this.SetInputTypeToText();
+            this.CheckIfResponseMeansActionOnClient();
             this.messages.push({
                 text: this.text,
                 is_from_user: true
             })
-            this.CheckIfResponseMeansActionOnClient();
             let message = {
                 text: this.text,
                 next_step: this.current_action.next_step,
@@ -78,56 +82,34 @@ export default {
             service.Send(message).then((response) => {
                 this.additional_data = null;
                 if(response.data){
-                    let bot_response = {
-                        key: response.data.key,
-                        text: this.ReplaceWithUserData(response.data.message),
+                    let bot_response = response.data.bot_response;
+                    let bot_message = {
+                        key: bot_response.key,
+                        text: this.ReplaceWithUserData(bot_response.message),
                         is_from_user: false
                     }
-                    this.current_action = response.data
-                    this.messages.push(bot_response)
+                    this.current_action = bot_response
+                    this.messages.push(bot_message)
+                    this.additional_data = null
+
+                    let additional_response = response.data.additional_response;
+                    if(additional_response){
+                        this[additional_response.action](additional_response.data)
+                    }
                 }
             })
         },
         CheckIfResponseMeansActionOnClient() {
             if(this.current_action.client_action){
-                this[this.current_action.client_action]();
+                let client_actions = this.current_action.client_action.split("|")
+                client_actions.forEach((client_action) => {
+                    this[client_action]();
+                })
             }
-            // switch(this.current_action){
-            //     case 'start_register':
-            //         this.user.name = this.text
-            //         return {
-            //             next_step: 'register_step_2',
-            //             additional_data: null
-            //         };
-            //     case 'register_step_2':
-            //         this.user.email = this.text
-            //         return {
-            //             next_step: 'register_step_3',
-            //             additional_data: null
-            //         };
-            //     case 'register_step_3':
-            //         this.user.password = this.text
-            //         return {
-            //             next_step: 'register_step_4',
-            //             additional_data: null
-            //         };
-            //     case 'register_step_4':
-            //         this.user.currency = this.text
-            //         return {
-            //             next_step: 'register_complete',
-            //             additional_data: JSON.stringify(this.user)
-            //         };
-            //     default:
-                    // return {
-                    //     next_step: null,
-                    //     additional_data: null
-                    // };
-            // }
         },
         ReplaceWithUserData(message) {
             let n = message.match(/{{(.*)}}/)
             if(n) {
-                console.log(n)
                 message = message.replace(n[0], this.user[n[1]])
             }
             return message
@@ -140,11 +122,39 @@ export default {
         },
         SetUserPassword() {
             this.user.password = this.text
+            this.text = this.text.replace(new RegExp(/./, 'g'), "*");
         },
         SetUserCurrency() {
             this.user.currency = this.text
+        },
+        SetUserAsAdditionalData() {
             this.additional_data = JSON.stringify(this.user)
+        },
+        SetTransactionAsAdditionalData() {
+            this.additional_data = JSON.stringify(this.transaction)
+        },
+        SetTransactionCurrency() {
+            this.transaction.currency = this.text
+        },
+        SetTransactionAmount() {
+            this.transaction.amount = this.text
+        },
+        SetInputTypeToPassword() {
+            console.log('SetInputTypeToPassword')
+            this.input_type = 'password';
+        },
+        SetInputTypeToText() {
+            console.log('SetInputTypeToText')
+            this.input_type = 'text';
+        },
+        SetToken(data) {
+            if(data.token && data.user){
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("user", JSON.stringify(data.user))
+                this.user = data.user            
+            }
         }
+           
     }
 }
 </script>
@@ -174,25 +184,11 @@ export default {
 
     .messages > .bot {
         text-align: left;
-        background-color: lightgreen;
+        background-color: lightcoral;
     }
 
     .messages > .user {
         text-align: right;
         background-color: blueviolet;
-    }
-
-    .messages > li > .options {
-        padding: 0;
-    }
-
-    .messages > li > .options > li {
-        list-style: none;
-        background-color: white;
-        color: blue;
-        display: inline-block;
-        padding: 5px 15px;
-        margin: 0 10px;
-        border-radius: 10px;
     }
 </style>

@@ -50,5 +50,29 @@ class BotHearsSeeder extends Seeder
             'hears' => 'Register',
             'bot_responses_key' => 'start_register'
         ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Log in',
+            'bot_responses_key' => 'login'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Login',
+            'bot_responses_key' => 'login'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Log-in',
+            'bot_responses_key' => 'login'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Balance',
+            'bot_responses_key' => 'balance'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Deposit',
+            'bot_responses_key' => 'deposit'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Withdraw',
+            'bot_responses_key' => 'withdraw'
+        ]);
     }
 }
