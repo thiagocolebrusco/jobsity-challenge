@@ -28,6 +28,8 @@ $ cd /var/www/api
 $ php artisan migrate --seed
 ```
 
+After that, the project is already up no http://localhost:8080. API is on http://localhost:8000.
+
 ## 🦸 Author
 
  <img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/4452296?s=460&u=f7a8d771005a27cf12386ccaac301fd00ac1041a&v=4" width="100px;" alt=""/><br />
