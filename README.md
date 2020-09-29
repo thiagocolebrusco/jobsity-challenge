@@ -9,12 +9,12 @@ Jobsity ChatBot App
 </h4>
 
 ## 🚀 How to run
-This project was built with docker containers. So to start you have to run the following command:
+This project was built with docker containers. So to start, you have to run the following command:
 ```bash
 $ docker-compose -f docker/docker-compose.yml up
 ```
 
-Then you should connect to MySQL Server using the following data and create a empty database named "jobsity":
+Then you should connect to MySQL Server using the following data and create an empty database named "jobsity":
 ```bash
 Host: localhost:3306
 User: root
