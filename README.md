@@ -31,6 +31,18 @@ After that, the project is already up no http://localhost:8080. API is on http:/
 
 ## 🦸 Author
 
+Bot keywords:
+- Sign up: Allow user to register in the chat bot app;
+- Log in: Allow user to log in with a previously created account;
+- Logout: User logout;
+- Balance: Show user's balance;
+- Deposit: Allow user to deposit an amount of money in his digital wallet with the given currency code;
+- Withdraw: Allow user to withdraw an amount of money from his digital wallet with the given currency code, as long as he has enough.
+
+<b>Thiago Colebrusco </b>
+
+## 🦸 Author
+
  <img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/4452296?s=460&u=f7a8d771005a27cf12386ccaac301fd00ac1041a&v=4" width="100px;" alt=""/><br />
 <b>Thiago Colebrusco </b>
  
