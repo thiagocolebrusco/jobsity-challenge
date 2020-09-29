@@ -24,7 +24,6 @@ Password:
 Following, you have to connect to thiago_php container and run migrations and seeders like below:
 ```bash
 $ docker exec -it thiago_php /bin/bash
-$ cd /var/www/api
 $ php artisan migrate --seed
 ```
 
