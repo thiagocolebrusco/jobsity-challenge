@@ -10,7 +10,7 @@
                 </ul>
             </b-col>
         </b-row>
-        <b-row>
+        <b-row class="bottom">
             <b-col md="8" offset-md="2" xs="12">
                 <b-input-group>
                     <b-form-input :type="input_type" @keyup.enter="Send" v-model="text" />
@@ -90,11 +90,9 @@ export default {
                         is_from_user: false
                     }
                     this.messages.push(bot_message)
-                    if(!response.data.is_exception){
-                        this.current_action = bot_response
-                        this.additional_data = null
-                        this.additional_response = response.data.additional_response;
-                    }
+                    this.current_action = bot_response
+                    this.additional_data = null
+                    this.additional_response = response.data.additional_response;
 
                     if(this.additional_response){
                         let actions = this.additional_response.action.split("|");
@@ -102,6 +100,7 @@ export default {
                             this[action](this.additional_response.data)
                         })
                     }
+                    window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
                 }
             })
         },
@@ -197,5 +196,9 @@ export default {
     .messages > .user {
         text-align: right;
         background-color: blueviolet;
+    }
+
+    .bottom {
+        margin-bottom: 30px;
     }
 </style>

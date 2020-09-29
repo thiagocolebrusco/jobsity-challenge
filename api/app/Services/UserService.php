@@ -1,23 +1,38 @@
 <?php
 
-namespace App\Jobsity\Services;
+namespace App\Services;
 
 use App\Models\User as User;
 use Illuminate\Support\Facades\Auth;
 
+use App\Util\Currency;
+
 
 class UserService
 {
+    private ?User $logged_user;
+
+    public function __construct(?User $logged_user = null) {
+        $this->logged_user = $logged_user;
+    }
 
     public function RegisterUser(Array $user_data) {
         try {
             if(! $user_data)
                 throw new \Exception("Empty user data");
             
-            $user = new User($user_data);
+            $user = new User;
+            $user->name = $user_data["name"];
+            $user->email = $user_data["email"];
+            $user->password = $user_data["password"];
+            $user->currency = $user_data["currency"];
+
             if(!$user)
                 throw new \Exception("Invalid user data");
                 
+            if(!Currency::Exists($user->currency))
+                throw new \Exception("Invalid currency");
+            
             if($user->save()){
                 $token = auth()->login($user);
                 return (object) [

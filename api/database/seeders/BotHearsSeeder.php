@@ -39,11 +39,19 @@ class BotHearsSeeder extends Seeder
             'bot_responses_key' => 'hello'
         ]);
         DB::table("bot_hears")->insert([
+            'hears' => 'Register',
+            'bot_responses_key' => 'start_register'
+        ]);
+        DB::table("bot_hears")->insert([
             'hears' => 'Sign up',
             'bot_responses_key' => 'start_register'
         ]);
         DB::table("bot_hears")->insert([
             'hears' => 'Sign-up',
+            'bot_responses_key' => 'start_register'
+        ]);
+        DB::table("bot_hears")->insert([
+            'hears' => 'Signup',
             'bot_responses_key' => 'start_register'
         ]);
         DB::table("bot_hears")->insert([

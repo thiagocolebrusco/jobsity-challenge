@@ -50,4 +50,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+
+    public function __set($property, $value) {
+        if($property == "currency"){
+            $value = strtoupper($value);
+        } else if($property == "password") {
+            $value = app('hash')->make($value);
+        }
+        parent::__set($property, $value);
+    }
 }

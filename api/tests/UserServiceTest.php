@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Jobsity\Services\UserService;
+use App\Services\UserService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 /**
@@ -48,7 +48,7 @@ class UserServiceTest extends TestCase
         ];
 
         $result = (new UserService())->Login($data);
-        $this->assertNotNull($result->token);
+        $this->assertNotNull($result->data["token"]);
     }
 
     public function test_register_user_valid_data()

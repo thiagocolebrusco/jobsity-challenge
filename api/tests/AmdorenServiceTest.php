@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobsity\Services\AmdorenService;
+use App\Services\AmdorenService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 /**

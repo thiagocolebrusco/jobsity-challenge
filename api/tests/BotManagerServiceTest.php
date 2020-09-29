@@ -1,7 +1,9 @@
 <?php
 
-use App\Jobsity\Services\BotManagerService;
+use App\Services\BotManagerService;
 use Laravel\Lumen\Testing\DatabaseMigrations;
+
+use App\Models\User;
 
 /**
  * @covers UserService
@@ -12,9 +14,10 @@ class BotManagerServiceTest extends TestCase
 
     public function test_call_service_method()
     {
+        $user = User::factory()->create(["currency" => "BRL"]);
         $data = [];
         
-        $user = (new BotManagerService())->CallServiceMethod("TransactionService||GetBalance", $data);
-        $this->assertEquals($user->email, "thiagocolebrusco@gmail.com");
+        $result = (new BotManagerService($user))->CallServiceMethod("TransactionService||GetBalance", $data);
+        $this->assertNotNull($result);
     }
 }

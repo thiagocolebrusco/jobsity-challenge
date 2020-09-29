@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobsity\Services;
+namespace App\Services;
 
 
 class AmdorenService

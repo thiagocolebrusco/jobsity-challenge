@@ -61,7 +61,7 @@ class BotResponsesSeeder extends Seeder
             'server_action' => "UserService||RegisterUser",
             'client_action' => null,
             'next_step' => null,
-            'message' => "Great! Now you are already registered here at Jobsity's Currency Bot"
+            'message' => "Great! Now you are already registered here at Jobsity's Currency Bot.<br/>How can I help you?"
         ]);
         DB::table("bot_responses")->insert([
             'key' => 'login',
@@ -86,7 +86,7 @@ class BotResponsesSeeder extends Seeder
         ]);
         DB::table("bot_responses")->insert([
             'key' => 'balance',
-            'server_action' => "TransactionService||GetBalance",
+            'server_action' => "TransactionService||ShowBalanceToUser",
             'client_action' => null,
             'next_step' => null,
             'message' => "Your balance is: {{balance}} {{currency}}.<br/>What else can I do for you?"

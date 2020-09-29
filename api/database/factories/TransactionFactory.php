@@ -23,8 +23,7 @@ class TransactionFactory extends Factory
     {
         return [
             'amount' => 10,
-            'currency' => "BRL",
-            'user_id' => 1
+            'currency' => "BRL"
         ];
     }
 }

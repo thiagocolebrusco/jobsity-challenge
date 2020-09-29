@@ -1,17 +1,24 @@
 <?php
 
 
-namespace App\Jobsity\Services;
+namespace App\Services;
 use App\Models\BotResponse;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\User;
+
 class BotManagerService
 {
+    private ?User $logged_user;
+
+    public function __construct(?User $logged_user = null) {
+        $this->logged_user = $logged_user;
+    }
 
     public function CallServiceMethod($server_action, $data) {
         list($service_name, $service_method) = explode('||', $server_action);
-        $service_name = "App\\Jobsity\\Services\\" . $service_name;
-        $service = new $service_name();
+        $service_name = "App\\Services\\" . $service_name;
+        $service = new $service_name($this->logged_user);
         return $service->$service_method($data);
     }
 
@@ -38,10 +45,7 @@ class BotManagerService
                                     ->first();
             } else if($bot_response->server_action){
                 $decoded = $additional_data ? (array) json_decode($additional_data) : [];
-                if(auth()->user()){
-                    $decoded["user"] = auth()->user();
-                }
-    
+                
                 $additional_response = $this->CallServiceMethod($bot_response->server_action, $decoded);
                 if(isset($additional_response->concat)) {
                     foreach($additional_response->concat as $key => $value) {
@@ -51,18 +55,15 @@ class BotManagerService
             }
     
             return [ 
-                'is_exception' => false,
                 'bot_response' => $bot_response,
                 'additional_response' => isset($additional_response) ? $additional_response : null
             ];
         } catch (\Exception $e) {
             return [ 
-                'is_exception' => true,
                 'bot_response' => new BotResponse([
-                    "message" => $e->getMessage(),
-                    "next_step" => $next_step
+                    "message" => $e->getMessage() . "<br/>What can I do for now?",
+                    "next_step" => null,
                 ]),
-                'additional_response' => null
             ];
         }
     }
